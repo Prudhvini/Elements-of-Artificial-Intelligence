@@ -164,7 +164,7 @@ def find_path_dfs(start_city, end_city, distance, time, path=[]):
 		return []
 
 	for node in g.get_vertex(start_city).get_connections():
-		print "node=",node
+		
 		temp = g.get_vertex(start_city).get_weight(node)
 		node_list = node_list + [node.get_id()]
 		edge_dict.setdefault(node.get_id(),[])
@@ -226,13 +226,28 @@ def astar_search(start_city,end_city,route_option):
 	g.get_vertex(start_city).parent = []
 	openlist[g.get_vertex(start_city)] = get_heuristic(lat[start_city],longt[start_city],lat[end_city],longt[end_city])	
 	path = find_path_astar(start_city, end_city, 0, lat, longt, openlist, closedlist, route_option)
-	node = path.pop(0)
-	if type(node) is str:
-		path = [node] + path
+	cost = 0
+	path1 =[]
+	length = len(path)
+	if path != {}:
+		cost = path.pop()
+		time = 0
+		length = len(path)
+		for i in range(0,length):
+			path1 = path1 + [path[i].get_id()]
+			if i < length-2:
+				temp = g.get_vertex(path[i].get_id()).get_weight(path[i+1])
+				#temp1 = get_heuristic(lat[path[i].get_id()],longt[path[i].get_id()],lat[end_city],longt[end_city])
+				#cost = float(cost) + float(temp[0]) + temp1
+				cost = float(cost) + float(temp[0])
+				time = time + float(temp[1])
+				path1 = path1 + [temp[2].rstrip()]
+			'''elif i >= length-1:
+				temp = g.get_vertex(path[length-2].get_id()).get_weight(path[length-1])
+				path1 = [temp[2].rstrip()] + path1'''
+		print cost,time,path1
 	else:
-		path = [node.get_id()] + path
-		
-	print path.pop(),path
+		print "No path found between %s and %s"%(start_city,end_city)
 
 def find_path_astar(start_city, end_city, weight, lat, longt, openlist, closedlist, route_option):
 	if(openlist == []):
@@ -256,27 +271,31 @@ def find_path_astar(start_city, end_city, weight, lat, longt, openlist, closedli
 				cost = 1
 			if node not in openlist:
 				if node.get_id() not in lat:
-					print "node not in lat"
-					openlist[node] = 10000 + cost
+					openlist[node] = 1000000 + cost
 				else:	
 					openlist[node] = get_heuristic(lat[node.get_id()],longt[node.get_id()],lat[end_city],longt[end_city]) + cost
 				node.parent = g.get_vertex(current[0].get_id())
+				node.parent_cost = current[1]
 		
 	openlist = collections.OrderedDict(sorted(openlist.items(), key=lambda t: t[1]))
-	
 	path = find_path_astar(start_city, end_city, weight, lat, longt,openlist,closedlist,route_option)
-	if path != []:
-		node = g.get_vertex(path.pop(0))
+
+	if path != {}:
+		if path[0].parent != []:
+			path = [path[0].parent] + path
+		#node = g.get_vertex(path.pop(0))
 		#cost = float(path.pop())
-		if node!=None:
-		#if node.parent == []:
+		'''if node != None and node.parent == []:
 			path = [str(node.get_id())] + path
 		else:
-			path = [str(node.get_id())] + path
-			path = [node.parent] + path
+			if node == None:
+				return
+			else:
+				path = [str(node.get_id())] + path
+				path = [node.parent] + path
 		print "path = ",path
 		#path = [str(g.get_vertex(current[0]))] + path + [str(cost)]
-		'''for node1 in g.get_vertex(current[0]).get_connections():
+		for node1 in g.get_vertex(current[0]).get_connections():
 			if node1.get_id() == path[0]:
 				cost = float(path.pop()) + current[1]
 				path = [str(g.get_vertex(current[0]).get_id())] + path + [str(cost)]'''
