@@ -653,8 +653,8 @@ Armstrong,_Iowa Estherville,_Iowa 18 45 IA_9
 Armstrong,_Iowa Fairmont,_Minnesota 18 45 IA/MN_15
 Armstrong,_Iowa Jct_US_169_&_IA_9_W,_Iowa 14 45 IA_9
 Armstrong,_Quebec Sandy_Stream_Mountain,_Maine 17 50 PQ_173
-Armstrong,_Quebec St-Gedeon,_Quebec 16 50 PQ_269
-Armstrong,_Quebec St-Georges-de-Beauce,_Quebec 27 50 PQ_173
+Armstrong,_Quebec StGedeon,_Quebec 16 50 PQ_269
+Armstrong,_Quebec StGeorgesdeBeauce,_Quebec 27 50 PQ_173
 Armstrong_Creek,_Wisconsin Cavaour,_Wisconsin 10 45 US_8
 Armstrong_Creek,_Wisconsin Florence,_Wisconsin 24 45 WI_101
 Armstrong_Creek,_Wisconsin Pembine,_Wisconsin 24 45 US_8
