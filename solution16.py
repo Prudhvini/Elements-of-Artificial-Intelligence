@@ -34,6 +34,15 @@ Example oonfig 1:
 The above configuration took 3 minutes to execute and the result is 
 All moves: U3, L3, D3, R3, R3, U3, L3, D3
 
+Example oonfig 2:
+1 2 4 3
+5 6 7 8
+9 11 12 10
+13 14 15 16
+
+The above configuration took 22 minutes to execute and the result is 
+All moves: R2, U2, L1, D2, L2, R1, U1, L1, D1
+
 We assumed that manhattan distance is the best heuristic for this problem. 
 We used a priority queue to store the node intsances that were not visited yet and a list to store the node instances visited
 We tried using various data structures but priority queue seemed to work best. 
