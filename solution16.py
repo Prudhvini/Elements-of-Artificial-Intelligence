@@ -66,7 +66,7 @@ class Board:
     """
     class for storing Board configuration
     """
-    def __init__(self,text):+
+    def __init__(self,text):
         """ Initializing board with the values from input text"""
         self.size = 4
         matrix_size = 16
