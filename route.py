@@ -55,7 +55,6 @@ DFS-0.67 seconds
 BFS-0.38 seconds
 ASTAR-15.5 seconds
 
-Astar took 20 times more time compared to DFS and BFS
 With use of better data structures, the performance of the algorithms can be enhanced.
 For distance, we got BFS as the best routing option
 For time , we got best results from A* all the time and BFS some times
@@ -83,7 +82,6 @@ import collections
 import math
 import itertools
 import operator
-import time
 class Vertex:
     def __init__(self, node):
         self.id = node
@@ -397,19 +395,15 @@ def main():
 	end_city = sys.argv[2]
 	route_option = sys.argv[3]
 	route_algorithm = sys.argv[4]
-	
 	global g
 	g = graph()
 	global f1
-	
 	city_list = [start_city]
 	index = len(city_list)
-	
+		
 	while index <= len(city_list):
 		create_graph(city_list,index-1,route_option,end_city)		
 		index=index+1
-		
-	#start = time.clock()
 	#for i in range(0,1000):
 	if(route_algorithm == 'bfs'):
 		bfs_search(start_city,end_city)
@@ -421,4 +415,5 @@ def main():
 		astar_search(start_city,end_city,route_option)
 		#print "A* time taken = "
 	#print time.clock() - start
+
 if __name__ == "__main__":main()
