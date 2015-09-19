@@ -23,14 +23,25 @@ g(n) = 1 (for every expansion)
 h(n) = manhattan distance (If the tile is present in the coreners of the same row or column then we take h as 1 
 since one slide will be enough to push the tile to its position)
 
-The heuristic function that we took is admissible because it is not an over estimate.
+The heuristic function that we took is admissible because it is a manhattan distance. Manhattan distance gives us the lower bound and hence it is admissible.
+
+Example oonfig 1:
+1 2 3 4 
+5 6 7 8
+9 11 12 10
+13 14 15 16
+
+The above configuration took 3 minutes to execute and the result is 
+All moves: U3, L3, D3, R3, R3, U3, L3, D3
 
 We assumed that manhattan distance is the best heuristic for this problem. 
 We used a priority queue to store the node intsances that were not visited yet and a list to store the node instances visited
 We tried using various data structures but priority queue seemed to work best. 
 
 The overall algorithm worked fine but it is taking too long to compute the moves. A better way of using data structures might reduce the time complexity.
-We are able to finc solution for most complex moves but the time taken is too long.
+We are able to find solution for most complex moves but the time taken is too long.
+
+By storing pre computed values in database the time complexity of A* can be imporoved
 """
 import copy
 import sys
@@ -46,7 +57,7 @@ class Board:
     """
     class for storing Board configuration
     """
-    def __init__(self,text):
+    def __init__(self,text):+
         """ Initializing board with the values from input text"""
         self.size = 4
         matrix_size = 16
