@@ -3,25 +3,79 @@ We considered this problem as a graph search problem and created a graph with ve
 We use two classes to maintain the information about the graph and vertices.
 The state space contains cities and their paths
 
+We are handling the mistakes in the files wherever possible by making the values 0 if they are numeric and '' in case of strings
+
 For BFS and DFS we are not considering the costs associated with the edges between the cities, we are considering all edges to have the same cost.
-The code to include the costs associated with the edge is also implemented but to be in consistent with the assignment we have commented that part.
+The code to include the costs associated with the edge is also implemented but to be in consistent with the assignment we have commented the code.
+The code for uniform cost search is commented.
 
-For A* we took the latitude and longitude positions of the cities to calculate the euclidean distance between current city and goal city. 
-We use the euclidean diatance as the heuristic function cost. The routing option selected by the user is used as g(n). We use both g(n)
-and h(n) to calcluate the successor function value. The vertex with the least f(n) is selected and visited. 
+For A* we consider the routing option and the heuristic for each option is as follows:
+Distance:
+In case of distance we read the latitude and longitude values from city-gps.txt and calculate the euclidean distance between current city and goal city.
+The euclidean distance heuristic is admissible because the distance between two cities in terms of latitude and logitude will definitely be less 
+than the actual distance between the cities. Therefore it cannot be an over estimate.
+The distance between two cities is selected as g(n)
 
-Heuristic function f(n) = g(n)+h(n) is admissible. 
+Time:
+For any two cities under consideration we find the euclidean distance between the cities, we multiply it by the speed value to get heuristic time value. 
+(By unary method and time = (distance / speed))
+The heuristic is admissibe because the time taken will be the minimum amount of time(speed being the bottle neck) to travel between cities. 
+The cost to travel between two cities is selected as g(n)
 
-The A* star algorithm chooses the distance between the cities as g(n) when distance is selected as the routing option.
-The A* start algorithm calculates the distance by using time and speed and uses it as g(n) when time is selected as the routing option.
-Number of turns is considered as the g(n) when segments is selected as the routiing option.
+Segments:
+Assumption made here is that on one highway there will be no turns. Therefore we consider heuristic to be 0.
+The cost is assumed to be 1 for each segment.
+f(n) = g(n)
 
 The following code can be execute by using the following commands
-python route.py <city name 1> <city name 2> <routing option> <algorithm>
+python route.py <city name 1> <city name 2> <routing_option> <route_algorithm>
+
+Routing algorithms are:
+bfs
+dfs
+astar
+
+Routing options are:
+distance
+time
+segments
 
 The output format is as follows
 
 Distance Time_taken Path(including cities and highways) 
+
+Analysis:
+Time taken: 
+For 100 runs of the algorithms following are the times:
+DFS-0.06 seconds
+BFS-0.04 seconds
+ASTAR-1.5 seconds
+For 1000 runs of the algorithms following are the same:
+DFS-0.67 seconds
+BFS-0.38 seconds
+ASTAR-15.5 seconds
+
+Astar took 20 times more time compared to DFS and BFS
+With use of better data structures, the performance of the algorithms can be enhanced.
+For distance, we got BFS as the best routing option
+For time , we got best results from A* all the time and BFS some times
+For segments, A* was the best algorithm
+
+An example for route between Bloomington,_Indiana and Indianapolis,_Indiana gave the following results
+DFS:
+194 4.05264180264 ['Bloomington,_Indiana', 'IN_37', 'Bedford,_Indiana', 'US_50', 'Seymour,_Indiana', 'I-65', 'Columbus,_Indiana', 'IN_46', 'Greensburg,_Indiana', 'IN_3', 'Rushville,_Indiana', 'IN_44', 'Shelbyville,_Indiana', 'IN_44', 'Franklin,_Indiana', 'I-65', 'Jct_I-65_&_I-465_S,_Indiana', 'I-74/465', 'Jct_I-74_&_I-465_E,_Indiana', 'US_421', 'Indianapolis,_Indiana']
+
+BFS:
+ 74 1.42905982906 ['Bloomington,_Indiana', 'IN_46', 'Columbus,_Indiana', 'I-65', 'Franklin,_Indiana', 'I-65', 'Jct_I-65_&_I-465_S,_Indiana', 'I-65', 'Indianapolis,_Indiana']
+
+Astar with distance:
+ 65.0 1.31581196581 ['Bloomington,_Indiana', 'IN_37', 'Martinsville,_Indiana', 'IN_44', 'Franklin,_Indiana', 'I-65', 'Jct_I-65_&_I-465_S,_Indiana', 'I-65', 'Indianapolis,_Indiana']
+
+Astar with time:
+ 52.0 1.05221445221 ['Bloomington,_Indiana', 'IN_37', 'Martinsville,_Indiana', 'IN_37', 'Jct_I-465_&_IN_37_S,_Indiana', 'I-74/465', 'Jct_I-65_&_I-465_S,_Indiana', 'I-65', 'Indianapolis,_Indiana']
+
+Astar with segments:
+ 65.0 1.31581196581 ['Bloomington,_Indiana', 'IN_37', 'Martinsville,_Indiana', 'IN_44', 'Franklin,_Indiana', 'I-65', 'Jct_I-65_&_I-465_S,_Indiana', 'I-65', 'Indianapolis,_Indiana']
 '''
 
 import sys
@@ -29,6 +83,7 @@ import collections
 import math
 import itertools
 import operator
+import time
 class Vertex:
     def __init__(self, node):
         self.id = node
@@ -342,24 +397,28 @@ def main():
 	end_city = sys.argv[2]
 	route_option = sys.argv[3]
 	route_algorithm = sys.argv[4]
-	#print sys.argv
+	
 	global g
 	g = graph()
 	global f1
-	#f1 = open('city-gps.txt')
+	
 	city_list = [start_city]
 	index = len(city_list)
 	
 	while index <= len(city_list):
 		create_graph(city_list,index-1,route_option,end_city)		
 		index=index+1
-	#print "graph = ",g.get_vertices()
-
+		
+	#start = time.clock()
+	#for i in range(0,1000):
 	if(route_algorithm == 'bfs'):
 		bfs_search(start_city,end_city)
+		#print "BFS time taken = "
 	if(route_algorithm == 'dfs'):
 		dfs_search(start_city,end_city)
+		#print "DFS time taken = "
 	if(route_algorithm == 'astar'):
 		astar_search(start_city,end_city,route_option)
-
+		#print "A* time taken = "
+	#print time.clock() - start
 if __name__ == "__main__":main()
